@@ -70,6 +70,26 @@ By prioritizing emotional design, zero-latency state transitions, and determinis
 
 ---
 
+## 🏆 Hackathon Submission Details
+
+### Chosen Vertical
+**Sustainability & Climate Tech** - Focusing on personal and enterprise carbon footprint reduction through predictive planning.
+
+### Approach and Logic
+Instead of a standard carbon calculator that guilt-trips users over past emissions, our approach shifts the psychology toward future action. We use a **deterministic math engine** to calculate a baseline footprint and then feed that context into a **Generative AI pipeline**. The AI logically sequences lifestyle changes and investments over a 36-month timeline, sorting them by immediate impact versus long-term cost. 
+
+### How the Solution Works
+1. **Context Gathering (The Twin Builder):** The user inputs their housing, commute, diet, and travel habits. A real-time math engine calculates their current footprint.
+2. **AI Sequencing:** A server action passes the user's data to Claude 3.5 Sonnet, utilizing strict `zod` schema enforcement to guarantee a 4-phase, JSON-structured roadmap.
+3. **Interactive Simulation (Carbon Time Machine):** The user drags a slider across their future timeline. The UI recalculates their projected emissions live based on the milestones they are scheduled to hit in the AI roadmap.
+
+### Assumptions Made
+1. **Standardized Baselines:** We assume standard emission coefficients for transport and diet based on IPCC averages (e.g., a flight is assumed to be short-haul unless specified).
+2. **Monotonic Reduction:** The Carbon Time Machine assumes that users successfully implement the milestone reductions exactly when the roadmap suggests them.
+3. **AI Fallback:** We assume that API rate limits or network issues could happen during live demonstrations, so the system is engineered to automatically fallback to an intelligent, hardcoded localized roadmap if the AI request fails.
+
+---
+
 ## 🏗 Architecture
 
 The platform is engineered for extreme resilience during live demonstrations. It eschews complex backends in favor of a monolithic Next.js App Router orchestration layer, a pure math engine, and serverless AI actions.
