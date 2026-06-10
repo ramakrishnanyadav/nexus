@@ -30,7 +30,7 @@ describe('Carbon Engine', () => {
 
   it('handles direct number inputs for flights from the simulator', () => {
     const result = calculateFootprint({
-      flights: 5 as any, // 5 * 0.2 = 1.0
+      flights: '5', // 5 * 0.2 = 1.0
     });
     expect(result.breakdown.flights).toBeCloseTo(1.0);
   });
