@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { motion } from 'framer-motion';
 import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 
-export function LandingView({ onStart }: { onStart: () => void }) {
+export const LandingView = memo(function LandingView({ onStart }: { onStart: () => void }) {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, y: -20 }} className="text-center max-w-3xl flex flex-col items-center">
       <h1 className="text-5xl md:text-[64px] font-bold tracking-tight leading-[1.1] mb-6">Build Your <span className="text-gradient">Climate Future</span></h1>
@@ -12,4 +12,4 @@ export function LandingView({ onStart }: { onStart: () => void }) {
       </button>
     </motion.div>
   );
-}
+});

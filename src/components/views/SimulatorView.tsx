@@ -1,12 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback, memo } from 'react';
 import { motion } from 'framer-motion';
 import { TwinData } from '@/lib/types';
 import { calculateFootprint, translateToEquivalents } from '@/lib/carbonEngine';
 
-export function SimulatorView({ twinData, onUpdate, onContinue }: { twinData: TwinData, onUpdate: (flights: number) => void, onContinue: () => void }) {
+export const SimulatorView = memo(function SimulatorView({ twinData, onUpdate, onContinue }: { twinData: TwinData, onUpdate: (flights: number) => void, onContinue: () => void }) {
   const [flights, setFlights] = useState(parseInt(String(twinData.flights)) || 4);
-  const currentTotal = calculateFootprint({ ...twinData, flights: flights.toString() }).total;
-  const equivs = translateToEquivalents(currentTotal);
+  
+  const currentTotal = useMemo(() => 
+    calculateFootprint({ ...twinData, flights: flights.toString() }).total, 
+    [twinData, flights]
+  );
+  
+  const equivs = useMemo(() => 
+    translateToEquivalents(currentTotal), 
+    [currentTotal]
+  );
+
+  const handleSliderChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = parseInt(e.target.value);
+    setFlights(val);
+    onUpdate(val);
+  }, [onUpdate]);
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="w-full max-w-3xl flex flex-col items-center text-center">
@@ -30,7 +44,7 @@ export function SimulatorView({ twinData, onUpdate, onContinue }: { twinData: Tw
           </div>
           <input 
             type="range" min="0" max="12" value={flights} 
-            onChange={(e) => { setFlights(parseInt(e.target.value)); onUpdate(parseInt(e.target.value)); }} 
+            onChange={handleSliderChange} 
             className="w-full h-2 bg-[#1F2937] rounded-full appearance-none accent-[#22D3EE]" 
             aria-label="Adjust flight count" aria-valuemin={0} aria-valuemax={12} aria-valuenow={flights}
           />
@@ -42,4 +56,4 @@ export function SimulatorView({ twinData, onUpdate, onContinue }: { twinData: Tw
       </button>
     </motion.div>
   );
-}
+});

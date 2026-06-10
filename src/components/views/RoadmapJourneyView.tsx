@@ -1,12 +1,20 @@
-import React from 'react';
+import React, { useMemo, memo } from 'react';
 import { motion } from 'framer-motion';
 import { RoadmapResult, RoadmapPhase, RoadmapAction } from '@/lib/types';
 
-export function RoadmapJourneyView({ roadmap, baselineTotal, onContinue }: { roadmap: RoadmapResult | null, baselineTotal: number, onContinue: () => void }) {
+export const RoadmapJourneyView = memo(function RoadmapJourneyView({ roadmap, baselineTotal, onContinue }: { roadmap: RoadmapResult | null, baselineTotal: number, onContinue: () => void }) {
   if (!roadmap) return null;
+  
   // Calculate destination based on actual roadmap phases
-  const totalReduction = roadmap.phases.reduce((acc: number, p: RoadmapPhase) => acc + p.subtotal_kg, 0) / 1000;
-  const destination = Math.max(0, baselineTotal - totalReduction).toFixed(1);
+  const totalReduction = useMemo(() => 
+    roadmap.phases.reduce((acc: number, p: RoadmapPhase) => acc + p.subtotal_kg, 0) / 1000,
+    [roadmap]
+  );
+  
+  const destination = useMemo(() => 
+    Math.max(0, baselineTotal - totalReduction).toFixed(1),
+    [baselineTotal, totalReduction]
+  );
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="w-full max-w-2xl flex flex-col items-center">
@@ -47,4 +55,4 @@ export function RoadmapJourneyView({ roadmap, baselineTotal, onContinue }: { roa
       </button>
     </motion.div>
   );
-}
+});

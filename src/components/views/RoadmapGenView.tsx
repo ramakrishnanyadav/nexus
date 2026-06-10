@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import { motion } from 'framer-motion';
 
 const STEPS = ["Analyzing lifestyle...", "Calculating opportunities...", "Sequencing actions...", "Building roadmap..."];
 
-export function RoadmapGenView({ onComplete }: { onComplete: () => void }) {
+export const RoadmapGenView = memo(function RoadmapGenView({ onComplete }: { onComplete: () => void }) {
   const [step, setStep] = useState(0);
 
   useEffect(() => {
@@ -29,4 +29,4 @@ export function RoadmapGenView({ onComplete }: { onComplete: () => void }) {
       <h3 className="text-2xl font-medium text-white/80">{STEPS[step]}</h3>
     </div>
   );
-}
+});

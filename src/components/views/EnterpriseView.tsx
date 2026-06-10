@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { motion } from 'framer-motion';
 
-export function EnterpriseView() {
+export const EnterpriseView = memo(function EnterpriseView() {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="w-full max-w-4xl text-center">
       <div className="mb-16">
@@ -25,4 +25,4 @@ export function EnterpriseView() {
       </div>
     </motion.div>
   );
-}
+});

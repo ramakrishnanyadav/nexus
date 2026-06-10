@@ -1,25 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback, memo } from 'react';
 import { motion } from 'framer-motion';
 import { TwinData } from '@/lib/types';
 
-export function TwinBuilderView({ data, onUpdate, onComplete }: { data: TwinData, onUpdate: (d: TwinData) => void, onComplete: () => void }) {
+export const TwinBuilderView = memo(function TwinBuilderView({ data, onUpdate, onComplete }: { data: TwinData, onUpdate: (d: TwinData) => void, onComplete: () => void }) {
   const [qIndex, setQIndex] = useState(0);
-  const questions = [
+  
+  const questions = useMemo(() => [
     { key: 'location', title: 'Where are you based?', options: ['Mumbai', 'Delhi', 'Bengaluru', 'Other'] },
     { key: 'housing', title: 'What is your housing situation?', options: ['Apartment', 'Independent House', 'Shared'] },
     { key: 'commute', title: 'How do you commute mostly?', options: ['Car (Petrol)', 'Car (EV)', 'Metro/Train', 'Two-Wheeler'] },
     { key: 'diet', title: 'What best describes your diet?', options: ['High Meat', 'Average Omnivore', 'Vegetarian', 'Vegan'] },
     { key: 'flights', title: 'Domestic flights per year?', options: ['0-2', '3-6', '7-12', '12+'] },
-  ];
+  ], []);
 
-  const currentQ = questions[qIndex];
-  const progress = (qIndex) / questions.length;
+  const currentQ = useMemo(() => questions[qIndex], [questions, qIndex]);
+  const progress = useMemo(() => qIndex / questions.length, [qIndex, questions.length]);
 
-  const handleSelect = (val: string) => {
+  const handleSelect = useCallback((val: string) => {
     onUpdate({ ...data, [currentQ.key]: val });
     if (qIndex < questions.length - 1) setQIndex(qIndex + 1);
     else onComplete();
-  };
+  }, [data, currentQ.key, qIndex, questions.length, onUpdate, onComplete]);
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="w-full flex flex-col items-center">
@@ -43,4 +44,4 @@ export function TwinBuilderView({ data, onUpdate, onComplete }: { data: TwinData
       </div>
     </motion.div>
   );
-}
+});

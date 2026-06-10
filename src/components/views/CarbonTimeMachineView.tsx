@@ -1,21 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback, memo } from 'react';
 import { motion } from 'framer-motion';
 import { TwinData, RoadmapResult, RoadmapPhase } from '@/lib/types';
 import { calculateFootprint } from '@/lib/carbonEngine';
 
-export function CarbonTimeMachineView({ twinData, roadmap, onContinue }: { twinData: TwinData, roadmap: RoadmapResult | null, onContinue: () => void }) {
+export const CarbonTimeMachineView = memo(function CarbonTimeMachineView({ twinData, roadmap, onContinue }: { twinData: TwinData, roadmap: RoadmapResult | null, onContinue: () => void }) {
   const [year, setYear] = useState(2026);
-  const progress = (year - 2026) / 4; 
+  const progress = useMemo(() => (year - 2026) / 4, [year]); 
   
-  // Dynamic recalculation binding
-  const currentTotal = calculateFootprint(twinData).total;
+  const currentTotal = useMemo(() => calculateFootprint(twinData).total, [twinData]);
   
-  // Extract reduction correctly from the new Zod Schema
-  const reduction = roadmap ? (roadmap.phases.reduce((acc: number, p: RoadmapPhase) => acc + p.subtotal_kg, 0) / 1000) : 1.4;
-  const emissions = (currentTotal - (progress * reduction)).toFixed(1);
+  const reduction = useMemo(() => 
+    roadmap ? (roadmap.phases.reduce((acc: number, p: RoadmapPhase) => acc + p.subtotal_kg, 0) / 1000) : 1.4,
+    [roadmap]
+  );
   
-  const savings = roadmap ? Math.round(progress * roadmap.total_saving_inr).toLocaleString('en-IN') : Math.round(progress * 184000).toLocaleString('en-IN');
-  const trees = roadmap ? Math.round(progress * roadmap.trees_equivalent) : Math.round(progress * 168);
+  const emissions = useMemo(() => (currentTotal - (progress * reduction)).toFixed(1), [currentTotal, progress, reduction]);
+  
+  const savings = useMemo(() => 
+    roadmap ? Math.round(progress * roadmap.total_saving_inr).toLocaleString('en-IN') : Math.round(progress * 184000).toLocaleString('en-IN'),
+    [roadmap, progress]
+  );
+  
+  const trees = useMemo(() => 
+    roadmap ? Math.round(progress * roadmap.trees_equivalent) : Math.round(progress * 168),
+    [roadmap, progress]
+  );
+
+  const handleSliderChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setYear(parseInt(e.target.value));
+  }, []);
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }} className="w-full max-w-5xl">
@@ -62,7 +75,7 @@ export function CarbonTimeMachineView({ twinData, roadmap, onContinue }: { twinD
         </div>
         <input 
           type="range" min="2026" max="2030" step="1" value={year} 
-          onChange={(e) => setYear(parseInt(e.target.value))} 
+          onChange={handleSliderChange} 
           className="w-full h-4 bg-[#1F2937] rounded-full appearance-none cursor-pointer accent-[#10B981]" 
           aria-label="Time Machine Year Slider" aria-valuemin={2026} aria-valuemax={2030} aria-valuenow={year}
         />
@@ -75,4 +88,4 @@ export function CarbonTimeMachineView({ twinData, roadmap, onContinue }: { twinD
       </div>
     </motion.div>
   );
-}
+});
