@@ -62,3 +62,47 @@ describe('V6 Integration Tests', () => {
     expect(highRoadmap.total_saving_inr).toBeGreaterThan(0);
   });
 });
+
+describe('Carbon Engine Edge Cases', () => {
+  const minTwin: TwinData = {
+    housing: 'Shared',
+    occupants: '4',
+    commute_km: '0',
+    commute: 'Walking/Cycling',
+    diet: 'Vegan',
+    flights: '0-2',
+    location: 'Mumbai'
+  };
+
+  const maxTwin: TwinData = {
+    housing: 'Independent House',
+    occupants: '1',
+    commute_km: '80',
+    commute: 'Car (Petrol)',
+    diet: 'High Meat',
+    flights: '12+',
+    location: 'Mumbai'
+  };
+
+  it('minimum emission profile returns positive non-zero footprint', () => {
+    const result = calculateFootprint(minTwin);
+    expect(result.total).toBeGreaterThan(0);
+    expect(result.total).toBeLessThan(4);
+    expect(result.breakdown).toBeDefined();
+  });
+
+  it('maximum emission profile stays within realistic bounds', () => {
+    const result = calculateFootprint(maxTwin);
+    expect(result.total).toBeGreaterThan(10);
+    expect(result.total).toBeLessThan(30);
+  });
+
+  it('fallback roadmap cumulative reduction is realistic and bounded', () => {
+    const { generateFallbackRoadmap } = require('./carbonEngine');
+    const roadmap = generateFallbackRoadmap(maxTwin);
+    const finalPhase = roadmap.phases[roadmap.phases.length - 1];
+    expect(finalPhase.cumulative_pct).toBeGreaterThanOrEqual(38);
+    expect(finalPhase.cumulative_pct).toBeLessThanOrEqual(80);
+    expect(RoadmapSchema.safeParse(roadmap).success).toBe(true);
+  });
+});

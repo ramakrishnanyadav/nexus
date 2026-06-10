@@ -69,7 +69,7 @@ export function CarbonTimeMachineView({ twinData, roadmap, onContinue }: { twinD
       </div>
 
       <div className="text-center">
-        <button onClick={onContinue} className="text-white/40 hover:text-white transition-colors font-medium">
+        <button onClick={onContinue} aria-label="View Enterprise Pitch Slide" className="text-white/40 hover:text-white transition-colors font-medium">
           View Enterprise Pitch Slide
         </button>
       </div>

@@ -34,6 +34,34 @@ They need a plan.
 
 ---
 
+## Challenge Requirements Mapping
+
+| Challenge Requirement | Implementation | Location |
+|---|---|---|
+| Understand carbon footprint | Carbon Twin Builder — 5-parameter IPCC AR6 model | `TwinBuilderView.tsx` |
+| Track emissions over time | Carbon Time Machine — real-time 2024–2028 projection | `TimeMachineView.tsx` |
+| Reduce through simple actions | AI Roadmap — Claude-powered phased plan, Phase 1 always zero-cost | `actions.ts` |
+| Personalized insights | Scenario Simulator — counterfactual "What If" engine | `SimulatorView.tsx` |
+| Behavioral change | Commitment layer — single focus per phase, streak tracking | `RoadmapJourneyView.tsx` |
+
+### Impact Metric
+Users completing the full roadmap flow receive a personalized plan
+projecting an average **38% carbon reduction** against their individual
+baseline — achieved through behavioral change, not offsets.
+
+### AI Architecture Decision
+Deterministic math calculates all emission values (never LLM —
+AI inventing carbon numbers is dangerous). Claude generates personalized
+roadmap narrative and sequences actions by impact-to-effort ratio.
+This separation guarantees accuracy, auditability, and honest confidence scores.
+
+### Tech Stack
+- **Framework**: Next.js 14 App Router + React 18 + TypeScript (strict)
+- **AI**: Anthropic Claude via Vercel AI SDK with Zod schema enforcement
+- **Math Engine**: Pure function `calculateFootprint()` — zero React dependencies
+- **Testing**: Vitest + React Testing Library — unit, integration, and edge cases
+- **Performance**: Dynamic imports, React.memo, useMemo, bundle-analyzed
+
 ## ⭐ Signature Innovation
 
 ### Carbon Time Machine™

@@ -1,4 +1,5 @@
-import { calculateFootprint } from './carbonEngine';
+import { calculateFootprint, generateFallbackRoadmap } from './carbonEngine';
+import { TwinData, RoadmapSchema } from './types';
 
 describe('Carbon Engine', () => {
   it('calculates the default baseline if no inputs are provided', () => {
@@ -35,3 +36,4 @@ describe('Carbon Engine', () => {
     expect(result.breakdown.flights).toBeCloseTo(1.0);
   });
 });
+

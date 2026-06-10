@@ -35,7 +35,7 @@ export function TwinBuilderView({ data, onUpdate, onComplete }: { data: TwinData
         <h2 className="text-3xl md:text-[40px] font-bold mb-8 text-center">{currentQ.title}</h2>
         <div className="grid grid-cols-1 gap-4">
           {currentQ.options.map(opt => (
-            <button key={opt} onClick={() => handleSelect(opt)} className="surface-card p-6 rounded-2xl text-xl hover:bg-[#1F2937] hover:border-[#4F46E5]/50 transition-all text-center">
+            <button key={opt} onClick={() => handleSelect(opt)} aria-label={`Select ${opt}`} className="surface-card p-6 rounded-2xl text-xl hover:bg-[#1F2937] hover:border-[#4F46E5]/50 transition-all text-center">
               {opt}
             </button>
           ))}

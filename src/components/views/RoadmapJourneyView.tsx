@@ -42,7 +42,7 @@ export function RoadmapJourneyView({ roadmap, baselineTotal, onContinue }: { roa
         </div>
       </div>
 
-      <button onClick={onContinue} className="mt-12 px-8 py-4 bg-[#10B981] text-black rounded-full font-bold text-lg hover:bg-[#059669] transition-all">
+      <button onClick={onContinue} aria-label="See My Future Setup" className="mt-12 px-8 py-4 bg-[#10B981] text-black rounded-full font-bold text-lg hover:bg-[#059669] transition-all">
         See My Future Setup
       </button>
     </motion.div>
