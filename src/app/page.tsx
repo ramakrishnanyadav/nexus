@@ -1,15 +1,28 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Leaf } from 'lucide-react';
 import { TwinData, Roadmap } from '@/lib/types';
 import { calculateFootprint } from '@/lib/carbonEngine';
 import { generateRoadmapAction } from '@/app/actions';
 import { 
-  LandingView, TwinBuilderView, SimulatorView, 
-  RoadmapGenView, RoadmapJourneyView, CarbonTimeMachineView, EnterpriseView 
+  LandingView as _LandingView, 
+  TwinBuilderView as _TwinBuilderView, 
+  SimulatorView as _SimulatorView, 
+  RoadmapGenView as _RoadmapGenView, 
+  RoadmapJourneyView as _RoadmapJourneyView, 
+  CarbonTimeMachineView as _CarbonTimeMachineView, 
+  EnterpriseView as _EnterpriseView 
 } from '@/components/views';
+
+const LandingView = React.memo(_LandingView);
+const TwinBuilderView = React.memo(_TwinBuilderView);
+const SimulatorView = React.memo(_SimulatorView);
+const RoadmapGenView = React.memo(_RoadmapGenView);
+const RoadmapJourneyView = React.memo(_RoadmapJourneyView);
+const CarbonTimeMachineView = React.memo(_CarbonTimeMachineView);
+const EnterpriseView = React.memo(_EnterpriseView);
 
 type Step = 'landing' | 'twin' | 'simulator' | 'roadmap-gen' | 'roadmap' | 'timemachine' | 'enterprise';
 
@@ -18,20 +31,20 @@ export default function CarbonFuturePlannerV6() {
   const [twinData, setTwinData] = useState<TwinData>({ location: '', housing: '', commute: '', diet: '', flights: '' });
   const [roadmap, setRoadmap] = useState<Roadmap | null>(null);
 
-  const baselineTotal = calculateFootprint(twinData).total;
+  const baselineTotal = useMemo(() => calculateFootprint(twinData).total, [twinData]);
 
-  const nextStep = (step: Step) => {
+  const nextStep = useCallback((step: Step) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     setCurrentStep(step);
-  };
+  }, []);
 
-  const handleGenerateRoadmap = async () => {
+  const handleGenerateRoadmap = useCallback(async () => {
     nextStep('roadmap-gen');
     // Call server action for AI generation
     const generated = await generateRoadmapAction(twinData);
     setRoadmap(generated);
     setTimeout(() => nextStep('roadmap'), 1000); // give the UI a moment to finish its animation cycle
-  };
+  }, [twinData, nextStep]);
 
   return (
     <div className="min-h-screen bg-[#09090B] text-[#F9FAFB] overflow-x-hidden font-sans selection:bg-[#22D3EE]/30">
