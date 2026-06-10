@@ -10,7 +10,7 @@
   [![Framer Motion](https://img.shields.io/badge/Framer_Motion-black?style=for-the-badge&logo=framer&logoColor=blue)](https://www.framer.com/motion/)
   [![Anthropic](https://img.shields.io/badge/Claude_3.5_Sonnet-1A1A1A?style=for-the-badge&logo=anthropic&logoColor=white)](https://www.anthropic.com/)
 
-  *Winner-ready MVP built for speed, emotional impact, and engineering resilience.*
+  *An AI-powered climate planning platform that transforms carbon awareness into long-term action.*
 
   <br />
 
@@ -25,7 +25,12 @@
 
 Most carbon apps explain the past. Almost none help users plan the future. 
 
-Users know their footprint. They don't know what to do next.
+Most climate tools stop at awareness.
+
+Awareness does not create change.
+
+People don't need another footprint score.
+They need a plan.
 
 ---
 
@@ -33,7 +38,7 @@ Users know their footprint. They don't know what to do next.
 
 ### Carbon Time Machine™
 
-**The first climate planning interface that allows users to drag through time and instantly visualize how lifestyle decisions change their future emissions, savings, and environmental impact.**
+**An interactive climate planning interface that lets users drag through time and instantly visualize how today's decisions shape tomorrow's emissions, savings, and environmental impact.**
 
 *[Insert Screenshot: Carbon Time Machine drag interface here]*
 
