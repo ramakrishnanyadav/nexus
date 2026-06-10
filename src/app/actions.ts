@@ -2,7 +2,7 @@
 
 import { generateObject } from 'ai';
 import { createAnthropic } from '@ai-sdk/anthropic';
-import { RoadmapSchema, TwinData, Roadmap } from '@/lib/types';
+import { RoadmapSchema, TwinData, RoadmapResult } from '@/lib/types';
 import { calculateFootprint, generateFallbackRoadmap } from '@/lib/carbonEngine';
 
 /**
@@ -12,7 +12,7 @@ import { calculateFootprint, generateFallbackRoadmap } from '@/lib/carbonEngine'
  * @param twin - The user's lifestyle data
  * @returns A structured Roadmap matching RoadmapSchema
  */
-export async function generateRoadmapAction(twin: TwinData): Promise<Roadmap> {
+export async function generateRoadmapAction(twin: TwinData): Promise<RoadmapResult> {
   const baseline = calculateFootprint(twin);
   
   // Approximate grid intensity based on location for context

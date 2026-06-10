@@ -1,11 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Roadmap } from '@/lib/types';
+import { RoadmapResult, RoadmapPhase, RoadmapAction } from '@/lib/types';
 
-export function RoadmapJourneyView({ roadmap, baselineTotal, onContinue }: { roadmap: Roadmap | null, baselineTotal: number, onContinue: () => void }) {
+export function RoadmapJourneyView({ roadmap, baselineTotal, onContinue }: { roadmap: RoadmapResult | null, baselineTotal: number, onContinue: () => void }) {
   if (!roadmap) return null;
   // Calculate destination based on actual roadmap phases
-  const totalReduction = roadmap.phases.reduce((acc, p) => acc + p.subtotal_kg, 0) / 1000;
+  const totalReduction = roadmap.phases.reduce((acc: number, p: RoadmapPhase) => acc + p.subtotal_kg, 0) / 1000;
   const destination = Math.max(0, baselineTotal - totalReduction).toFixed(1);
 
   return (
@@ -21,12 +21,12 @@ export function RoadmapJourneyView({ roadmap, baselineTotal, onContinue }: { roa
           <p className="text-white/60">{destination} tons / year</p>
         </div>
 
-        {[...roadmap.phases].reverse().map((p, i) => (
+        {[...roadmap.phases].reverse().map((p: RoadmapPhase, i: number) => (
           <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.2 }} key={p.phase} className="relative pl-24 mb-12">
             <div className="absolute left-[22px] top-4 w-3 h-3 rounded-full bg-white/20 border-2 border-white/50" />
             <div className="surface-card p-6 rounded-2xl border-l-4 border-l-[#4F46E5]">
               <p className="text-sm text-white/50 font-bold uppercase tracking-wider mb-2">{p.title}: {p.months}</p>
-              {p.actions.map((act, j) => (
+              {p.actions.map((act: RoadmapAction, j: number) => (
                  <div key={j} className="mb-3">
                     <h4 className="text-xl font-bold mb-1">{act.action}</h4>
                     <p className="text-[#22D3EE] font-medium">-{(act.impact_kg / 1000).toFixed(2)} CO₂</p>

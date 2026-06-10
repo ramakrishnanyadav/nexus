@@ -3,7 +3,7 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Leaf from 'lucide-react/dist/esm/icons/leaf';
-import { TwinData, Roadmap } from '@/lib/types';
+import { TwinData, RoadmapResult } from '@/lib/types';
 import { calculateFootprint } from '@/lib/carbonEngine';
 import { generateRoadmapAction } from '@/app/actions';
 import { 
@@ -32,7 +32,7 @@ type Step = 'landing' | 'twin' | 'simulator' | 'roadmap-gen' | 'roadmap' | 'time
 export default function CarbonFuturePlannerV6() {
   const [currentStep, setCurrentStep] = useState<Step>('landing');
   const [twinData, setTwinData] = useState<TwinData>({ location: '', housing: '', commute: '', diet: '', flights: '' });
-  const [roadmap, setRoadmap] = useState<Roadmap | null>(null);
+  const [roadmap, setRoadmap] = useState<RoadmapResult | null>(null);
 
   const baselineTotal = useMemo(() => calculateFootprint(twinData).total, [twinData]);
 

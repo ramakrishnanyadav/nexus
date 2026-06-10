@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { TwinData, Roadmap } from '@/lib/types';
+import { TwinData, RoadmapResult, RoadmapPhase } from '@/lib/types';
 import { calculateFootprint } from '@/lib/carbonEngine';
 
-export function CarbonTimeMachineView({ twinData, roadmap, onContinue }: { twinData: TwinData, roadmap: Roadmap | null, onContinue: () => void }) {
+export function CarbonTimeMachineView({ twinData, roadmap, onContinue }: { twinData: TwinData, roadmap: RoadmapResult | null, onContinue: () => void }) {
   const [year, setYear] = useState(2026);
   const progress = (year - 2026) / 4; 
   
@@ -11,7 +11,7 @@ export function CarbonTimeMachineView({ twinData, roadmap, onContinue }: { twinD
   const currentTotal = calculateFootprint(twinData).total;
   
   // Extract reduction correctly from the new Zod Schema
-  const reduction = roadmap ? (roadmap.phases.reduce((acc, p) => acc + p.subtotal_kg, 0) / 1000) : 1.4;
+  const reduction = roadmap ? (roadmap.phases.reduce((acc: number, p: RoadmapPhase) => acc + p.subtotal_kg, 0) / 1000) : 1.4;
   const emissions = (currentTotal - (progress * reduction)).toFixed(1);
   
   const savings = roadmap ? Math.round(progress * roadmap.total_saving_inr).toLocaleString('en-IN') : Math.round(progress * 184000).toLocaleString('en-IN');

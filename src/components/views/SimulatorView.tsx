@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { TwinData } from '@/lib/types';
-import { calculateFootprint } from '@/lib/carbonEngine';
+import { calculateFootprint, translateToEquivalents } from '@/lib/carbonEngine';
 
 export function SimulatorView({ twinData, onUpdate, onContinue }: { twinData: TwinData, onUpdate: (flights: number) => void, onContinue: () => void }) {
-  const [flights, setFlights] = useState(parseInt(twinData.flights) || 4);
+  const [flights, setFlights] = useState(parseInt(String(twinData.flights)) || 4);
   const currentTotal = calculateFootprint({ ...twinData, flights: flights.toString() }).total;
+  const equivs = translateToEquivalents(currentTotal);
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="w-full max-w-3xl flex flex-col items-center text-center">
@@ -15,7 +16,13 @@ export function SimulatorView({ twinData, onUpdate, onContinue }: { twinData: Tw
         <p className="text-xl text-white/50 mb-4">Projected Footprint</p>
         <h3 className="text-[80px] font-bold leading-none mb-4 tabular-data text-gradient">{currentTotal.toFixed(1)} <span className="text-3xl text-white/40">tons</span></h3>
         
-        <div className="w-full max-w-md mt-12">
+        <div className="flex gap-8 mb-8 text-white/60">
+          <div><span className="font-bold text-white">{equivs.trees.toLocaleString()}</span> Trees</div>
+          <div><span className="font-bold text-white">{equivs.km_driven.toLocaleString()}</span> Km Driven</div>
+          <div><span className="font-bold text-white">{equivs.phone_charges.toLocaleString()}</span> Charges</div>
+        </div>
+
+        <div className="w-full max-w-md mt-4">
           <div className="flex justify-between mb-4 text-white/60">
             <span>0 Flights</span>
             <span className="text-white font-bold">{flights} Flights / yr</span>
